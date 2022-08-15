@@ -11,6 +11,26 @@ namespace IOUtilities
 {
     public class Reader : IReader
     {
+        public IParser parser;
+        public IValidation validator;
+
+        public void Reader(IParser Parser, IValidation Validator)
+        {
+            parser = Parser;
+            validator = Validator;  
+            
+            IEnumerable<User> Users = Read(string path);
+            foreach (var item in Users)
+            {
+                if (validator(item))
+                {
+                    parser(item);
+                }
+
+            }
+
+        }
+
         IEnumerable<User> Read(string path)
         {
             IEnumerable<User> Users;
@@ -33,19 +53,7 @@ namespace IOUtilities
 
         }
 
-        static void Reader(IParser parser, IValidation validator)
-        {
-            IEnumerable<User> Users = Read(string path);
-            foreach (var item in Users)
-            {
-                if (validator(item))
-                {
-                    parser(item);
-                }
-
-            }
-
-        }
+        
     }
 }
 
