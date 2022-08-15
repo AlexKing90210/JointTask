@@ -12,26 +12,15 @@ namespace IOUtilities
     public class Reader : IReader
     {
         public IParser parser;
-        public IValidation validator;
+        public IValidator validator;
 
-        public void Reader(IParser Parser, IValidation Validator)
+        public Reader(IParser Parser, IValidator Validator)
         {
             parser = Parser;
             validator = Validator;  
-            
-            IEnumerable<User> Users = Read(string path);
-            foreach (var item in Users)
-            {
-                if (validator(item))
-                {
-                    parser(item);
-                }
-
-            }
-
         }
 
-        IEnumerable<User> Read(string path)
+        IEnumerable<User> IReader.Read(string path)
         {
             IEnumerable<User> Users;
             // Блок нужен для того, чтобы код не падал, если вдруг такого файла найти не удалось
@@ -47,6 +36,15 @@ namespace IOUtilities
                 foreach (string s in readText)
                 {
                     Users.Append(s);
+                }
+
+                foreach (var item in Users)
+                {
+                    if (validator(item))
+                    {
+                        parser(item);
+                    }
+
                 }
             }
             return Users;
