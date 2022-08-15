@@ -14,13 +14,13 @@ namespace IOUtilities
         public IParser parser;
         public IValidator validator;
 
-        public Reader(IParser Parser, IValidator Validator)
+        public Reader(IParser _parser, IValidator _validator)
         {
-            parser = Parser;
-            validator = Validator;  
+            parser = _parser;
+            validator = _validator;  
         }
 
-        IEnumerable<User> IReader.Read(string path)
+        public static IEnumerable<User> IReader.Read(string path)
         {
             IEnumerable<User> Users;
             // Блок нужен для того, чтобы код не падал, если вдруг такого файла найти не удалось
@@ -33,22 +33,19 @@ namespace IOUtilities
             {
                 // Построчное считывание файла
                 string[] readText = File.ReadAllLines(path);
-                foreach (string s in readText)
+                foreach(string s in readText)
                 {
-                    Users.Append(s);
-                }
-
-                foreach (var item in Users)
-                {
-                    if (validator(item))
+                    //Считывание и обработка файла
+                    // Не знаю как сделать
+                }    
+                /*{
+                    if (IValidator.Parse(s)
                     {
-                        parser(item);
+                        yield return IParser.Parse(s);
                     }
+                };*/
 
-                }
             }
-            return Users;
-
         }
 
         
